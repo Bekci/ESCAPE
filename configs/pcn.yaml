@@ -1,0 +1,58 @@
+dataset:
+  name: PCN
+  category_file_path: /mnt/projects/PointCloudCompletion/data/ShapeNetCompletion/PCN.json
+  partial_points_path: /mnt/projects/PointCloudCompletion/data/ShapeNetCompletion/%s/partial/%s/%s/%02d.pcd
+  complete_points_path: /mnt/projects/PointCloudCompletion/data/ShapeNetCompletion/%s/complete/%s/%s.pcd
+  partial_points_parent_path: /mnt/projects/PointCloudCompletion/data/ShapeNetCompletion/%s/partial/
+  complete_points_parent_path: /mnt/projects/PointCloudCompletion/data/ShapeNetCompletion/%s/complete/
+  keypoints_dir: /mnt/projects/PointCloudCompletion/data/SkeletonMergerKeypoints%d/train/%s
+  rotated_keypoints_dir: /mnt/projects/PointCloudCompletion/data/SkeletonMergerKeypoints%d/train_only_rot/%s
+  val_keypoints_dir: /mnt/projects/PointCloudCompletion/data/SkeletonMergerKeypoints%d/val/%s
+  val_rotated_keypoints_dir: /mnt/projects/PointCloudCompletion/data/SkeletonMergerKeypoints%d/val_only_rot/%s
+  partial_keypoints_dir: "/mnt/projects/PointCloudCompletion/data/SkeletonMergerKeypoints%d/%s_partial/%s"
+  val_partial_keypoints_dir: ""
+  n_points: 2048
+  n_renderings: 8
+  initial_point_num: 512
+  n_basis: 32
+
+model:
+  dim_feat: 512
+  up_factors: [1, 4, 8]
+  num_pc: 256
+  num_p0: 512
+  bounding: True
+  radius: 1.0
+
+train:
+  optimizer: {
+    type: Adam,
+    kwargs: {
+      lr: 0.001,
+      weight_decay: 0,
+      betas: [.9, .999]
+    }}
+  scheduler: {
+    type: StepLR,
+    kwargs: {
+      decay_step: 10,
+      gamma: 0.5,
+    }}
+  seed: 2022
+  gpu: [2]
+  batch_size: 32
+  num_workers: 4
+  epochs: 50
+  loss_func: cd_l1
+  betas: [.9, .999]
+  save_freq: 10
+  out_path:
+  resume: False
+  model_path:
+
+test:
+  split: test
+  gpu: [2]
+  batch_size: 16
+  num_workers: 16
+  loss_func: cd_l1

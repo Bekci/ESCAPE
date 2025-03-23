@@ -55,7 +55,7 @@ Download dataset from below sources:
 * [KITTI](https://drive.google.com/drive/folders/1N3IhVq5p1qNBUnyZCtPmxSEl98Stx4Jf)
 * [OmniObject3D](https://drive.google.com/drive/u/0/folders/1-hlkTqUJR_J2xht1qztmX2xAq_qNw4vn)
 
-For OmniObject3D there is a reference [notebook file](omniobject\OmniObjectRenderBlenderImages.ipynb) for creating the dataset containing partial and complete point clouds.
+For OmniObject3D there is a reference [notebook file](omniobject/OmniObjectRenderBlenderImages.ipynb) for creating the dataset containing partial and complete point clouds.
 
 
 ## Trained Models

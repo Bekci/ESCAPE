@@ -64,12 +64,12 @@ Pretrained models for PCN dataset can be downloaded from [here](https://drive.go
 
 For the [first pretrained model](https://drive.google.com/file/d/1n_DZwe9MDisOK--qCDwzX9aBUcpY-jGR/view?usp=sharing) use below parameters:
 
-| Parameter        | Value |   |
-|------------------|-------|---|
-| k                | 16    |   |
-| curvature_radius | 0.075 |   |
-| curvature_thres  | 0.5   |   |
-| neighbor_size    | 16    |   |
+| Parameter        | Value |
+|------------------|-------|
+| k                | 16    |
+| curvature_radius | 0.075 |
+| curvature_thres  | 0.5   |
+| neighbor_size    | 16    |
 
 for the [second provided model](https://drive.google.com/file/d/1q3Wx661mwKe7l-DuKj8ldKMbNcaZY98v/view?usp=sharing) below parameters change `k` with 32.
 

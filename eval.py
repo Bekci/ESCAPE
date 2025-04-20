@@ -12,9 +12,9 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n_k', '--num_keypoint', type=int, default=8)
-parser.add_argument('-cp', '--config_path', type=str, default='configs/noise_exps/denoise128.yaml')
+parser.add_argument('-cp', '--config_path', type=str, default='configs/escape.yaml')
 parser.add_argument('-mp', '--model_path', type=str, default='')
-parser.add_argument('-k', '--keypoint', type=str, default='curvature_region')
+parser.add_argument('-k', '--keypoint', type=str, default='curvature_radius')
 parser.add_argument('-c_k', '--curve_k', type=int, default=16)
 parser.add_argument('-c_r', '--curve_radius', type=float, default=0.075)
 parser.add_argument('-c_t', '--curve_thres', type=float, default=0.5)
@@ -90,51 +90,6 @@ def optimize_points_loader(model, dataloader, loss_object, validate_loader=None)
     return losses, results_per_cat
 
 
-def optimize_points_loader(model, dataloader, loss_object, validate_loader=None):
-    losses = []
-    sup_losses = []
-    model.eval()
-
-    results_per_cat = {}
-    with torch.no_grad():
-        for (taxonomy_ids, model_ids, data) in tqdm(dataloader):
-
-            for k in data:
-                if k in var_keys_for_gpu:
-                    data[k] = var_or_cuda(data[k])
-
-            gt_dists = torch.sqrt(torch.sum(1e-6 +  (data['gt'][:,:,None,:] - data['basis_points'][:,None,:,:])**2, axis=-1))
-
-            ret = model(data['partial'], data['basis_points'])
-
-            for i in range(ret[0].shape[0]):
-        
-                coarse_points = ret[0][i]
-                dense_points = ret[-1][i]
-                category_id = taxonomy_ids[i]
-                
-                basis_points_np = data['basis_points'].cpu().numpy()[i]
-                distances_np  = dense_points.cpu().numpy()
-                gt_dists_np = gt_dists.cpu().numpy()[i]
-                gt_points_np = data['gt'][i].cpu().numpy()
-                  
-                optimized_points = find_points_from_distance(distances_np, basis_points_np)
-                loss = loss_object.chamfer_loss(torch.unsqueeze(torch.from_numpy(optimized_points.astype('float32')), 0).cuda(), data['gt'][i:i+1])
-                loss_val = loss.item()
-                losses.append(loss_val)
-
-                if category_id not in results_per_cat:
-                    results_per_cat[category_id] = []
-                
-                results_per_cat[category_id].append(loss_val * 1000)
-            
-            if validate_loader:
-                test_single_epoch(model, validate_loader, loss_object)
-
-    return losses, results_per_cat
-
-
-
 # ['02691156', '02933112', '02958343',  '03001627',  '03636649',  '04256520',  '04379243', '04530566']
 # ['airplane', 'cabinet', 'car', 'chair', 'lamp', 'sofa', 'table', 'watercraft']
 
@@ -159,7 +114,7 @@ if __name__ == '__main__':
 
     print("Keypoint Type: ", keypoint_type ,  " Model config: ", curvature_params)
 
-    config_path = '/mnt/projects/PointCloudCompletion/code/BEST/configs/roi_pcn_skeleton.yaml'
+    config_path = './configs/pcn.yaml'
     config = read_yaml(config_path)
 
     model_config = read_yaml(model_config_path)

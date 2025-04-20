@@ -60,7 +60,19 @@ For OmniObject3D there is a reference [notebook file](omniobject/OmniObjectRende
 
 ## Trained Models
 
-Trained models will be released soon.
+Pretrained models for PCN dataset can be downloaded from [here](https://drive.google.com/drive/folders/1d03g7gpfEql3nl_M3AGMgjKzciGoJnHS?usp=sharing)
+
+For the [first pretrained model](https://drive.google.com/file/d/1n_DZwe9MDisOK--qCDwzX9aBUcpY-jGR/view?usp=sharing) use below parameters:
+
+| Parameter        | Value |   |
+|------------------|-------|---|
+| k                | 16    |   |
+| curvature_radius | 0.075 |   |
+| curvature_thres  | 0.5   |   |
+| neighbor_size    | 16    |   |
+
+for the [second provided model](https://drive.google.com/file/d/1q3Wx661mwKe7l-DuKj8ldKMbNcaZY98v/view?usp=sharing) below parameters change `k` with 32.
+
 
 
 ## Acknowledgements

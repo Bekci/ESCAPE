@@ -1,4 +1,3 @@
-import os
 import torch
 import numpy as np
 from datasets.utils import read_yaml
@@ -48,7 +47,7 @@ def test_single_epoch(model, dataloader, loss_object):
     return np.mean(epoch_losses, axis=0)
 
 
-def optimize_points_loader(model, dataloader, loss_object, validate_loader=None):
+def optimize_points_loader(model, dataloader, loss_object):
     losses = []
     sup_losses = []
     model.eval()
@@ -83,9 +82,6 @@ def optimize_points_loader(model, dataloader, loss_object, validate_loader=None)
                     results_per_cat[category_id] = []
                 
                 results_per_cat[category_id].append(loss_val * 1000)
-            
-            if validate_loader:
-                test_single_epoch(model, validate_loader, loss_object)
 
     return losses, results_per_cat
 
@@ -139,10 +135,8 @@ if __name__ == '__main__':
     print(" val loss: ", val_score)
     
     opt_val_dataset, opt_val_loader = get_dataset_and_loader('val', config, 4, sample_num, shuffle=False, drop_last=False, num_keypoints=keypoint_number, keypoint_type=keypoint_type, curvature_params=curvature_params)
-    
-    val_dataset, val_loader = get_dataset_and_loader('val', config, 8, sample_num, shuffle=False, drop_last=False, num_keypoints=keypoint_number, keypoint_type=keypoint_type, curvature_params=curvature_params)
-    
-    point_losses, opt_res_per_cat = optimize_points_loader(model, opt_val_loader, loss_obj, validate_loader=val_loader)
+        
+    point_losses, opt_res_per_cat = optimize_points_loader(model, opt_val_loader, loss_obj)
     
     mean_loss = np.mean(point_losses)
     print("Optimized point loss: %.2f " % (mean_loss*1e3))
@@ -162,9 +156,7 @@ if __name__ == '__main__':
     
     opt_val_dataset, opt_val_loader = get_dataset_and_loader('test', config, 4, sample_num, shuffle=False, drop_last=False, num_keypoints=keypoint_number, keypoint_type=keypoint_type, curvature_params=curvature_params)
     
-    val_dataset, val_loader = get_dataset_and_loader('val', config, 8, sample_num, shuffle=False, drop_last=False, num_keypoints=keypoint_number, keypoint_type=keypoint_type, curvature_params=curvature_params)
-    
-    point_losses, opt_res_per_cat = optimize_points_loader(model, opt_val_loader, loss_obj, validate_loader=None)
+    point_losses, opt_res_per_cat = optimize_points_loader(model, opt_val_loader, loss_obj)
     
     mean_loss = np.mean(point_losses)
     print("Optimized point loss: %.2f " % (mean_loss*1e3))

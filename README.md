@@ -17,6 +17,7 @@ Subsequently, we perform optimization to calculate the predicted shapes from the
 
 ![Model architecture](figures/architecture.png)
 
+[Inference Notebook](notebooks/Infrence.ipynb)
 
 ## Installation
 
@@ -34,6 +35,9 @@ Install required libraries with the following command:
 ```
 bash scripts\install.sh
 ```
+
+Before running any script, change the dataset path in the [pcn.yml config](configs\pcn.yaml). Namely `partial_points_path`, `complete_points_path`
+`partial_points_parent_path` and `complete_points_parent_path`. 
 
 Once everything is installed the training can be started with:
 
